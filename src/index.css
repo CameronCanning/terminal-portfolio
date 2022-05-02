@@ -9,7 +9,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: calc(10px + 2vmin);
-  font-size: 2rem;
+  font-size: 1.6rem;
 }
 
 
@@ -18,14 +18,37 @@ body {
   margin: auto;
   margin-top: 50px; 
   margin-bottom: 50px;
-  width: 800px;
+  width: 900px;
   border-radius: 5px;
-  padding: 10px;
-  height: 350px;
+  height: 450px;
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  
 }
 
+.cursor {
+  display:inline-block;
+  margin: 0 0 -4px 4px;
+  height: 25px;
+  width: 13px;
+  background-color: white;
+  
+}
+.blink {
+  animation: blinker 1s step-start infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.terminal-header {
+  padding: 0;
+  margin: 0;
+  height: 37px;
+  border-radius: 5px 5px 0 0;
+  background-color: #555;
+}
 span.user-color {
   color: yellow;
 }
@@ -34,10 +57,26 @@ span.dir-color{
   color: greenyellow;
 }
 
-.terminal-line {
-  height: 37px;
+.terminal-input {
+  /**background-color: blue;
+  caret-color: transparent;
+  */
+  border: none;
+  outline:none;
+  
 }
-
+.bottom-scroll {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+}
+.terminal-content-wrapper {  
+  padding: 15px;
+  padding-top: 5px;
+  padding-bottom:0px;
+  height: 408px;
+  
+}
 #terminal-input {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -45,11 +84,29 @@ span.dir-color{
   height: 100%;
   border: none;
   outline: none;
-  width: 100%;
+  width: auto;
   padding: 0;
-  margin-left: 5px;
+  margin-left:0;
 
   background-color: #373737;
   caret-color: #fff;
   color: white;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 8px #373737 solid;
+  background-clip: padding-box;
+  background: #555;
+  border-radius: 10px;
+
+}
+body::-webkit-scrollbar-thumb {
+  border: 7px #CFAFAF solid;
+  background-clip: padding-box;
+  background: #555;
+  border-radius: 10px;
+
 }
