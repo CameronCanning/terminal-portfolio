@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Terminal = ({noHeader, user}) => {
     const [auto, setCommand] = useState({command: '', output: <p>test</p>});
@@ -69,7 +69,7 @@ const Terminal = ({noHeader, user}) => {
                         {contentArray.map((e, i) => {
                             return <Content key={i} {...e}/>
                         })}
-                        <Content {...current}/>
+                        <Editor {...current}/>
                     </div>
                 </div>
                 </>
@@ -79,17 +79,16 @@ const Terminal = ({noHeader, user}) => {
 };
 const Header = () => <div className='terminal-header'/>;
 
-const Content = ({user, host, dir, typing, command, output, dead}) => {
-    console.log(output);
+const Content = ({user, host, dir, command, output}) => {
+    const prompt = ' $ ';
     return (
         <div className='terminal-content'>
             <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
             <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
             <span>   
                 <span className='terminal-input'>                
-                    {' $ '}
-                    {command}   
-                    {!dead && <span className={typing ? 'cursor' : 'cursor blink'}/>}
+                    {prompt}
+                    {command}                       
                 </span>
             </span>
             <span>
@@ -99,13 +98,32 @@ const Content = ({user, host, dir, typing, command, output, dead}) => {
     )
 }
 
+const Editor = ({user, host, dir, typing, command}) => {
+    const ref = useRef();
+    useEffect(() => ref.current.scrollIntoView());
+    const prompt = ' $ ';
+    return (
+        <div className='terminal-content' ref={ref}>
+            <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
+            <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
+            <span>   
+                <span className='terminal-input'>                
+                    {prompt}
+                    {command}   
+                    <span className={typing ? 'cursor' : 'cursor blink'}/>
+                </span>
+            </span>
+        </div>
+    )
+}
 
-const lsPortfolio = <span>
+const lsPortfolio = 
+    <span>
         <div>about.txt</div>
         <div>education.txt</div>
         <div>skills.txt</div>
         <div>projects/</div>
-</span>;
+    </span>;
 console.log(lsPortfolio);
 export default Terminal;
 

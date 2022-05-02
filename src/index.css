@@ -65,17 +65,17 @@ span.dir-color{
   outline:none;
   
 }
-.bottom-scroll {
-  display: flex;
-  flex-direction: column-reverse;
-  overflow-y: auto;
-}
 .terminal-content-wrapper {  
+  display: flex;
+  flex-direction: column;
   padding: 15px;
   padding-top: 5px;
   padding-bottom:0px;
   height: 408px;
-  
+  overflow-y: auto;
+}
+.terminal-content {
+  flex-shrink: 1;
 }
 #terminal-input {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
