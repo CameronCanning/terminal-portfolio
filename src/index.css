@@ -17,13 +17,17 @@ body {
   background-color: #373737;
   margin: auto;
   margin-top: 50px; 
-  margin-bottom: 50px;
   width: 900px;
   border-radius: 5px;
-  height: 450px;
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-  
+}
+.terminal-content-wrapper {  
+  background-color: #373737;
+  height: 450px;
+  padding: 5px;
+  border-radius: 5px;
+  overflow-y: auto;
 }
 
 .cursor {
@@ -49,6 +53,11 @@ body {
   border-radius: 5px 5px 0 0;
   background-color: #555;
 }
+.content-command {
+  padding-top: 10px;
+  display: block;
+
+}
 span.user-color {
   color: yellow;
 }
@@ -57,41 +66,6 @@ span.dir-color{
   color: greenyellow;
 }
 
-.terminal-input {
-  /**background-color: blue;
-  caret-color: transparent;
-  */
-  border: none;
-  outline:none;
-  
-}
-.terminal-content-wrapper {  
-  display: flex;
-  flex-direction: column;
-  padding: 15px;
-  padding-top: 5px;
-  padding-bottom:0px;
-  height: 408px;
-  overflow-y: auto;
-}
-.terminal-content {
-  flex-shrink: 1;
-}
-#terminal-input {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-  font-size: 2rem;
-  height: 100%;
-  border: none;
-  outline: none;
-  width: auto;
-  padding: 0;
-  margin-left:0;
-
-  background-color: #373737;
-  caret-color: #fff;
-  color: white;
-}
 ::-webkit-scrollbar {
   width: 20px;
 }
