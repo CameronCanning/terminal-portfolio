@@ -15,7 +15,7 @@ export const useAutoType = (speed) => {
     }, [auto])
 
     return [
-        string,
+        `${string}`,
         (autoString, delay) => {
             setTimeout(() => setAuto(autoString), delay)
             

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-
+import { createPortal } from 'react-dom';
+import { useAutoType } from '../hooks/editor';
 const lsPortfolio = 
     <span>
         <span className='content-command'>about.txt</span>
@@ -23,30 +24,13 @@ const commands = {
 const Terminal = (props) => {
     const [loadTime, setLoadTime] = useState(props.loadTime || 2100);  
     const [sending, setSending] = useState(false);
-    const [auto, setAuto] = useState('');
     const [contentArray, setContentArray] = useState([]);
-    const [editor, setEditor] = useState({});
+    const [editor, setEditor] = useState({dir: '', user: props.user || 'user'});
     const [batchCommands, setBatchCommands] = useState(['cd portfolio', 'ls']);
 
+    const [command, typeCommand, typing] = useAutoType(50);
+
     const notInitRender = useRef(false);
-	//auto type command on update
-	useEffect(() => {   
-        if (auto) {
-            setTimeout(() => {   
-                setAuto(prev => prev.substring(1));       				
-                setEditor(prev => {
-                    return {
-                        ...prev,
-                        command: prev.command + auto[0]
-                    }
-                })
-            }, props.typingSpeed || 50)
-        }
-        else if (editor.typing && editor.command) {
-            setTimeout(() => executeCommand(), 500);
-            setEditor(prev => {return {...prev, typing: false}}); 
-        }
-	}, [auto]);
 
     useEffect(() => {
         if (notInitRender.current && !sending && batchCommands.length > 0){
@@ -67,21 +51,9 @@ const Terminal = (props) => {
         else if (batchCommands.length > 0) {
             console.log('sending first');
             nextCommand();
-            
         }
 
     }, [loadTime]);
-
-    //re starts animation for dev
-    useEffect(() => {
-        setContentArray([]);
-        setEditor({
-            command: '',
-            dir: '',
-            typing: false,
-            user: props.user || 'user'
-        });
-    }, []);
 
     const nextCommand = () => {
         let newBatch = [...batchCommands];
@@ -89,14 +61,11 @@ const Terminal = (props) => {
         setBatchCommands(newBatch.slice(1));
 
     }
-    const sendCommand = (command, delay=1000) => { 
-        console.log(editor.typing);
-        if (!editor.typing){
-            setTimeout(() => {
-                setEditor(prev => {return {...prev, typing: true}});    
-                setSending(true);
-                setAuto(command)        
-            }, delay)
+    const sendCommand = (command) => { 
+        console.log(command);
+        if (!typing){          
+            setSending(true);
+            typeCommand(command, 1000);
         }            
     }
 
@@ -120,7 +89,7 @@ const Terminal = (props) => {
             //state -> strings
             setContentArray(prev => [...prev, {
                 user: `${props.user}`,
-                command: `${editor.command}`,
+                command: `${command}`,
                 dir: `${editor.dir}`,
                 output: output,
             }]);
@@ -142,7 +111,7 @@ const Terminal = (props) => {
                         {contentArray.map((e, i) => {
                             return <Content key={i} {...e}/>
                         })}
-                        <Editor {...editor}/>
+                        <Editor command={command} typing={typing}/>
                         </>
                     }
                 </div>
@@ -152,6 +121,29 @@ const Terminal = (props) => {
 };
 
 const Header = () => <div className='terminal-header'/>;
+
+const Editor = ({command, typing}) => {
+    console.log('command: ' + command);
+    const user = 'cameroncanning';
+    const host = '';
+    const dir = '';
+    const ref = useRef();
+    useEffect(() => ref.current.scrollIntoView());
+    const prompt = ' $ ';
+    return (
+        <div className='terminal-content' ref={ref}>
+            <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
+            <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
+            <span>   
+                <span className='terminal-input'>                
+                    {prompt}
+                    {command}   
+                    <span className={typing ? 'cursor' : 'cursor blink'}/>
+                </span>
+            </span>
+        </div>
+    )
+}
 
 const Content = ({user, host, dir, command, output}) => {
     const prompt = ' $ ';
@@ -172,24 +164,7 @@ const Content = ({user, host, dir, command, output}) => {
     )
 }
 
-const Editor = ({user, host, dir, typing, command}) => {
-    const ref = useRef();
-    useEffect(() => ref.current.scrollIntoView());
-    const prompt = ' $ ';
-    return (
-        <div className='terminal-content' ref={ref}>
-            <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
-            <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
-            <span>   
-                <span className='terminal-input'>                
-                    {prompt}
-                    {command}   
-                    <span className={typing ? 'cursor' : 'cursor blink'}/>
-                </span>
-            </span>
-        </div>
-    )
-}
+
 
 export default Terminal;
 
