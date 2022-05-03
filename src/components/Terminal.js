@@ -26,8 +26,8 @@ const Terminal = (props) => {
     const [auto, setAuto] = useState('');
     const [contentArray, setContentArray] = useState([]);
     const [editor, setEditor] = useState({});
+    const [batchCommands, setBatchCommands] = useState(['cd portfolio', 'ls']);
 
-    const [initCommands, setInitCommands] = useState(['cd portfolio', 'ls', 'ls', 'ls']);
     const notInitRender = useRef(false);
 	//auto type command on update
 	useEffect(() => {   
@@ -49,9 +49,9 @@ const Terminal = (props) => {
 	}, [auto]);
 
     useEffect(() => {
-        if (notInitRender.current && !sending){
-            console.log('sending rest');
-            sendCommand(initCommands.shift());
+        if (notInitRender.current && !sending && batchCommands.length > 0){
+            console.log('sending next');
+            nextCommand();
         }
         else {
             notInitRender.current = true
@@ -64,15 +64,15 @@ const Terminal = (props) => {
             console.log('loading...')
             setTimeout(() => setLoadTime(0), loadTime);    
         }
-        else if (initCommands.length > 0) {
+        else if (batchCommands.length > 0) {
             console.log('sending first');
-            let newInitCommands = [...initCommands];
-            sendCommand(newInitCommands.shift());
-            setInitCommands(newInitCommands);
+            nextCommand();
+            
         }
 
     }, [loadTime]);
 
+    //re starts animation for dev
     useEffect(() => {
         setContentArray([]);
         setEditor({
@@ -83,7 +83,14 @@ const Terminal = (props) => {
         });
     }, []);
 
+    const nextCommand = () => {
+        let newBatch = [...batchCommands];
+        sendCommand(newBatch[0]);
+        setBatchCommands(newBatch.slice(1));
+
+    }
     const sendCommand = (command, delay=1000) => { 
+        console.log(editor.typing);
         if (!editor.typing){
             setTimeout(() => {
                 setEditor(prev => {return {...prev, typing: true}});    
@@ -93,29 +100,31 @@ const Terminal = (props) => {
         }            
     }
 
-    const executeCommand = () => {
-        setSending(false);
-        let output;
-        if (commands[editor.command]) {
-            if (typeof commands[editor.command].output === 'function') {
-                output = commands[editor.command].output(editor);
+    const executeCommand = (delay=1000) => {
+        setTimeout(() => {
+            setSending(false);
+            let output;
+            if (commands[editor.command]) {
+                if (typeof commands[editor.command].output === 'function') {
+                    output = commands[editor.command].output(editor);
+                }
+                else {
+                    output = commands[editor.command].output;
+                }
+                setEditor(prev => { return {...prev, command: '', dir: commands[editor.command].dir || prev.dir}}); 
             }
             else {
-                output = commands[editor.command].output;
+                output = <p>Command doesn't exist</p>
+                setEditor(prev => { return {...prev, command: '', dir: prev.dir}}); 
             }
-            setEditor(prev => { return {...prev, command: '', dir: commands[editor.command].dir || prev.dir}}); 
-        }
-        else {
-            output = <p>Command doesn't exist</p>
-            setEditor(prev => { return {...prev, command: '', dir: prev.dir}}); 
-        }
-        //state -> strings
-        setContentArray(prev => [...prev, {
-            user: `${props.user}`,
-            command: `${editor.command}`,
-            dir: `${editor.dir}`,
-            output: output,
-        }]);
+            //state -> strings
+            setContentArray(prev => [...prev, {
+                user: `${props.user}`,
+                command: `${editor.command}`,
+                dir: `${editor.dir}`,
+                output: output,
+            }]);
+    },delay);
         
     }
 
