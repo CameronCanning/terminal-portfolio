@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
-export const useAutoType = (speed=50, startDelay=1000, endDelay=1000) => {
+export const useAutoType = (speed=50, startDelay=0, endDelay=0) => {
     const [string, setString] = useState('');
     const [auto, setAuto] = useState('');
     const [typing, setTyping] = useState(false);
@@ -50,7 +50,7 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
     const [user, setUser] = useState(_user);
     const [dir, setDir] = useState(_dir);
 
-    const [[command, setCommand], typeCommand, typing] = useAutoType(50);
+    const [[command, setCommand], typeCommand, typing] = useAutoType(50, 0, 1100);
 
     //load effect then call initial command
     useEffect(() => {
@@ -60,37 +60,46 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
         }
         else {
 			console.log('loaded');
-			submitCommand('cd portfolio');
+			submitCommand('cd portfolio', 2000);
         }
     }, [loading]);	
 
-    const commands = {
-        'cd portfolio': () => {
-            setDir('/portfolio')
-        },
-        'ls': () => {
-            return;
+    const run = (cmd) => {
+        const commands = {
+            'cd portfolio': () => {
+                setDir('/portfolio');
+                //return null;
+            },
+            'ls': () => {
+                return <p>list</p>;
+            }
+        }
+        if (cmd in commands) {
+            return commands[cmd]();
+        } 
+        else {
+            return <p>Command does not exist</p>
         }
     }
 
     const execute = (cmd) => {
-        commands[cmd]();
+        let output = run(cmd);
         setHistory(prev => [
             ...prev,
             {
                 user: user,
                 dir: dir,
                 command: cmd,
+                output: output
             }  
         ]);
         setCommand('');
     }
 
-    const submitCommand = (cmd) => {
+    const submitCommand = (cmd, delay) => {
 		typeCommand(cmd, (typeCommand) => {
 			execute(typeCommand);
-		
-		});
+		}, delay);
 	}
 
     return [

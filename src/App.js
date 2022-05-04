@@ -7,8 +7,8 @@ function App() {
 	const [terminal, submitCommand] = useTerminalControl('cameroncanning', '', 2100);
 	return (	
 		<>	
-		<Command/>
-		<Command/>
+		<button onClick={()=>submitCommand('ls')}>ls</button>
+		<button onClick={()=>submitCommand('lol')}>ls</button>
 		<Terminal {...terminal}/>
 		</>
 	);
