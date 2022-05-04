@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAutoType, useEditorControl } from './hooks/editor';
+import { useTerminalControl } from './hooks/editor';
 import Terminal from './components/Terminal';
 import Command from './components/Command';
 
@@ -16,10 +16,9 @@ const commands = {
 }
 
 function App() {
-	const [loadTime, setLoadTime] = useState(2100);  
-
-	const [[command, setCommand], typeCommand, typing] = useAutoType(50);
-	const [execute, history, user, dir] = useEditorControl('cameroncanning');
+	const [loadTime, setLoadTime] = useState(2100);  	
+	const [command, user, dir, history, typing, submitCommand] = useTerminalControl('cameroncanning');
+	//const [{execute, command}, history, user, dir] = useEditorControl('cameroncanning');
     //const didMount = useRef(false);
     
     //load effect then call initial command
@@ -32,16 +31,7 @@ function App() {
 			console.log('loaded');
 			submitCommand('cd portfolio');
         }
-    }, [loadTime]);
-
-	const submitCommand = (cmd) => {
-		typeCommand(cmd, (typeCommand) => {
-			console.log('cb');
-			execute(typeCommand);
-			setCommand('');
-			
-		});
-	}
+    }, [loadTime]);	
 
 	return (	
 		<>	

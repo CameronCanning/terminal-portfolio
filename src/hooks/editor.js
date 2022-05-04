@@ -37,48 +37,56 @@ export const useAutoType = (speed=50, startDelay=1000, endDelay=1000) => {
                 setAuto(autoString);
                 setTyping(true); 
             }, delay || startDelay);
-            
+            setString('')
         }
         ,
         typing
     ]
 }
 
-export const useEditorControl = (_user='user', _dir='') => {
+export const useTerminalControl = (_user='user', _dir='') => {
     const [history, setHistory] = useState([]);
     const [user, setUser] = useState(_user);
     const [dir, setDir] = useState(_dir);
 
-    useEffect(()=> {
-        console.log('com');
-        console.log(user);
-        console.log(dir);
-    },[user, dir])
+    const [[command, setCommand], typeCommand, typing] = useAutoType(50);
+
     const commands = {
-        'cd portfolio': async () => {
+        'cd portfolio': () => {
             setDir('/portfolio')
-            console.log('commands');
         },
         'ls': () => {
-            return
+            return;
         }
     }
 
-    const execute = async (cmd) => {
-        await commands[cmd]();
+    const execute = (cmd) => {
+        commands[cmd]();
         setHistory(prev => [
             ...prev,
             {
                 user: user,
                 dir: dir,
                 command: cmd,
-            }
+            }  
         ]);
+        setCommand('');
     }
+
+    const submitCommand = (cmd) => {
+		typeCommand(cmd, (typeCommand) => {
+			console.log('cb');
+			execute(typeCommand);
+		
+		});
+	}
+
     return [
-        execute,
-        history,
+        command,
         user,
         dir,
+        history,
+        typing,
+        submitCommand
     ]
 }
