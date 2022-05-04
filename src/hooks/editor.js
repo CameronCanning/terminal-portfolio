@@ -44,12 +44,25 @@ export const useAutoType = (speed=50, startDelay=1000, endDelay=1000) => {
     ]
 }
 
-export const useTerminalControl = (_user='user', _dir='') => {
+export const useTerminalControl = (_user='user', _dir='', load= 0) => {
+    const [loading, setLoadTime] = useState(load);  	
     const [history, setHistory] = useState([]);
     const [user, setUser] = useState(_user);
     const [dir, setDir] = useState(_dir);
 
     const [[command, setCommand], typeCommand, typing] = useAutoType(50);
+
+    //load effect then call initial command
+    useEffect(() => {
+        if (loading) {
+            console.log('loading...')
+            setTimeout(() => setLoadTime(0), loading);    
+        }
+        else {
+			console.log('loaded');
+			submitCommand('cd portfolio');
+        }
+    }, [loading]);	
 
     const commands = {
         'cd portfolio': () => {
@@ -75,18 +88,21 @@ export const useTerminalControl = (_user='user', _dir='') => {
 
     const submitCommand = (cmd) => {
 		typeCommand(cmd, (typeCommand) => {
-			console.log('cb');
 			execute(typeCommand);
 		
 		});
 	}
 
     return [
-        command,
-        user,
-        dir,
-        history,
-        typing,
-        submitCommand
+        {
+            command,
+            user,
+            dir,
+            history,
+            typing,
+            loading
+        }
+        ,
+        submitCommand   
     ]
 }

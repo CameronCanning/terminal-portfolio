@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react';
 
-const Terminal = ({loadTime, history, user, dir, command, typing, noHeader=false}) => {
+const Terminal = ({loading, history, user, dir, command, typing, noHeader=false}) => {
     return (
         <div className='terminal'>
             {!noHeader && <Header/>}
             <div className='bottom-scroll'>
                 <div className='terminal-content-wrapper'>
                     {
-                        loadTime
+                        loading
                         ?
                         <span className={'cursor blink'}/>
                         :
