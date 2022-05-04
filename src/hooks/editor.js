@@ -4,7 +4,7 @@ export const useAutoType = (speed=50, startDelay=1000, endDelay=1000) => {
     const [string, setString] = useState('');
     const [auto, setAuto] = useState('');
     const [typing, setTyping] = useState(false);
-    const [callback, setCallback] = useState(()=>()=>{});
+    const [callback, setCallback] = useState(null);
     const didMount = useRef(false);
 
     useEffect(() => {
@@ -20,36 +20,65 @@ export const useAutoType = (speed=50, startDelay=1000, endDelay=1000) => {
         else if (typing) {
             setTyping(false);
             setTimeout(() => {
-                callback(string);
-                setCallback(()=>()=>{});
+                if (callback) {
+                    callback(string);
+                    setCallback(null);
+                }
             }, endDelay);
         }
     }, [auto])
 
     return [
-        `${string}`,
+        [string, setString]
+        ,
         (autoString, callback, delay) => {         
-            setCallback((()=>callback));   
+            if (callback) setCallback((()=>callback));   
             setTimeout(() => {
                 setAuto(autoString);
                 setTyping(true); 
             }, delay || startDelay);
             
-        },
+        }
+        ,
         typing
     ]
 }
 
-export const useEditor = (
-    setString = '',
-    command = '', 
-    dir = '', 
-    typing = false, 
-    user = 'user',
-    delay = 50
-) => {
-    const [auto, setAuto] = useState('');
-    useEffect(() => {
-        console.log('1');
-    })
+export const useEditorControl = (_user='user', _dir='') => {
+    const [history, setHistory] = useState([]);
+    const [user, setUser] = useState(_user);
+    const [dir, setDir] = useState(_dir);
+
+    useEffect(()=> {
+        console.log('com');
+        console.log(user);
+        console.log(dir);
+    },[user, dir])
+    const commands = {
+        'cd portfolio': async () => {
+            setDir('/portfolio')
+            console.log('commands');
+        },
+        'ls': () => {
+            return
+        }
+    }
+
+    const execute = async (cmd) => {
+        await commands[cmd]();
+        setHistory(prev => [
+            ...prev,
+            {
+                user: user,
+                dir: dir,
+                command: cmd,
+            }
+        ]);
+    }
+    return [
+        execute,
+        history,
+        user,
+        dir,
+    ]
 }
