@@ -45,20 +45,25 @@ export const useAutoType = (speed=50, startDelay=0, endDelay=0) => {
 }
 
 export const useTerminalControl = (_user='user', _dir='', load= 0) => {
-    const [loading, setLoadTime] = useState(load);  	
+    const [loading, setLoadTime] = useState(load);  
+    const [sending, setSending] = useState(load ? true : false);	
     const [history, setHistory] = useState([]);
     const [user, setUser] = useState(_user);
     const [dir, setDir] = useState(_dir);
-
+    
     const [[command, setCommand], typeCommand, typing] = useAutoType(50, 0, 1100);
 
     //load effect then call initial command
     useEffect(() => {
         if (loading) {
             console.log('loading...')
-            setTimeout(() => setLoadTime(0), loading);    
+            setTimeout(() => {
+                setLoadTime(0);
+                setSending(false);
+            }, loading);    
         }
-        else {
+        //prevents running on dev hotreload
+        else if (history.length === 0) {
 			console.log('loaded');
 			submitCommand('cd portfolio', 2000);
         }
@@ -78,7 +83,7 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
             return commands[cmd]();
         } 
         else {
-            return <p>Command does not exist</p>
+            return 'Command does not exist'
         }
     }
 
@@ -94,12 +99,18 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
             }  
         ]);
         setCommand('');
+        setSending(false);
     }
 
     const submitCommand = (cmd, delay) => {
-		typeCommand(cmd, (typeCommand) => {
-			execute(typeCommand);
-		}, delay);
+        if (sending) {
+            return null;
+        }
+        else if (cmd) {
+            setSending(true);
+		    typeCommand(cmd, (typeCommand) => execute(typeCommand), delay);
+        }
+        return true
 	}
 
     return [
@@ -109,7 +120,8 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
             dir,
             history,
             typing,
-            loading
+            loading,
+            sending
         }
         ,
         submitCommand   
