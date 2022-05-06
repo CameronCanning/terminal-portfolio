@@ -37,7 +37,7 @@ export const useAutoType = (speed=50, startDelay=0, endDelay=0) => {
                 setAuto(autoString);
                 setTyping(true); 
             }, delay || startDelay);
-            setString('')
+            setString('');
         }
         ,
         typing

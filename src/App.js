@@ -1,26 +1,27 @@
 import { useEffect, useState } from 'react';
-import { useTerminalControl } from './hooks/editor';
+import { useTerminalControl, useAutoType } from './hooks/editor';
 import Terminal from './components/Terminal';
 
 const App = () => {	
 	const [terminal, submit] = useTerminalControl('cameroncanning', '', 2100);
+
 	const commandsAlias = [
-		{alias: 'about', value: 'cat about.txt'},
-		{alias: 'education', value: 'cat education.txt'},
-		{alias: 'skills', value: 'cat skills.json'},
-		{alias: 'projects', value: 'cat ./projects/*'},
-		{alias: 'contact', value: 'cat contact.json'}
+		{alias: '👨‍💻About', value: 'cat about.txt'},
+		{alias: '📖Education', value: 'cat education.txt'},
+		{alias: '⌨️Skills', value: 'cat skills.json'},
+		{alias: '🛠️Projects', value: 'cat ./projects/*'},
+		{alias: '✉️Contact', value: 'cat contact.json'}
 	];
 	const [readyProgress , setReadyProgress] = useState(2);
 
 	const tab = <>&nbsp;&nbsp;&nbsp;</>;
 
 	useEffect(() => {
-		if (!terminal.loading){
+		if (!terminal.loading && terminal.history.length === 0){
 			submit('cd portfolio', 2000);
 		}	
 	}, [terminal.loading]);
-	useEffect(() => {
+	useEffect(() => {		
 		if (!terminal.sending && readyProgress > 0) {
 			setReadyProgress(prev => prev - 1);
 		}
@@ -58,17 +59,16 @@ const App = () => {
 			'cat ./projects/*': () => {
 				const projects = [
 					{
+						name: 'auto-terminal',
+						description: 'An autotyping terminal for React (you\'re using it right now!)',
+						//github: 'github.com/cameroncanning/short-earl',
+						demo: 'https://cameroncanning.com'
+					},
+					{
 						name: 'short-earl',
 						description: 'URL shortener developed using MERN',
 						github: 'https://github.com/cameroncanning/short-earl',
 						website: 'https://shortearl.herokuapp.com'
-
-					},
-					{
-						name: 'auto-terminal',
-						description: 'An autotyping terminal for React',
-						//github: 'github.com/cameroncanning/short-earl',
-						demo: 'https://cameroncanning.com'
 
 					},
 					{
@@ -81,8 +81,13 @@ const App = () => {
 					{
 						name: 'wikipage-connecter',
 						description: 'Flask API that finds the shortest chain between 2 pages',
-						github: 'https://github.com/CameronCanning/wikipage-connecter',
+						github: 'https://github.com/cameroncanning/wikipage-connecter',
 
+					},
+					{
+						name: 'NEATproject',
+						description: 'Implementation of a NeuroEvolution of Augmenting Topologies (NEAT) genetic algorithm in pure python',
+						github: 'https://github.com/CameronCanning/NEATproject'
 					},
 					{
 						name: 'PaintSheetGenerator',
@@ -147,9 +152,9 @@ const App = () => {
 	
 	return (	
 		<>
-		<div className='container'>
-			<div>
-				<div className={(readyProgress === 0 ? 'fade-in ' : '') + 'command-container main-content'}>
+		<div className='center-vertical'>
+			<div className='container'>
+				<div className={(readyProgress === 0 ? 'fade-in ' : '') + 'command-container'}>
 					{commandsAlias.map(cmd => 
 						<span
 							key={cmd.alias} 
@@ -161,7 +166,7 @@ const App = () => {
 					)}
 				
 				</div>	
-				<Terminal {...terminal}/>
+				<Terminal {...terminal}/>					
 			</div>
 		</div>
 		</>

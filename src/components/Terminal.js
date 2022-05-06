@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 
 const Terminal = ({loading, history, user, dir, command, typing, noHeader=false}) => {
     return (
-        <div className='terminal main-content'>
+        <div className='terminal'>
             {!noHeader && <Header/>}
-            <div className='test'>
+            <div className='terminal-body'>
                 <div className='terminal-content-wrapper'>
                     {
                         loading
@@ -33,14 +33,13 @@ const Editor = ({command, typing, user, dir}) => {
     const prompt = ' $ ';
     return (
         <div className='terminal-content' ref={ref}>
+            
             <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
-            <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
-            <span>   
-                <span className='terminal-input'>                
-                    {prompt}
-                    {command}   
-                    <span className={typing ? 'cursor' : 'cursor blink'}/>
-                </span>
+            <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>   
+            <span className='terminal-input'>  
+                <span className='prompt'>{prompt}</span>               
+                {command}   
+                <span className={typing ? 'cursor' : 'cursor blink'}/>
             </span>
         </div>
     )
@@ -52,16 +51,13 @@ const Content = ({user, host, dir, command, output}) => {
         <div className='terminal-content'>
             <span className='user-color'>{user && host ? `${user}@${host}` : user || host || ''}</span>
             <span className='dir-color'>{dir ? ':~' + dir : ':~'}</span>
-            <span>   
-                <span className='terminal-input'>                
-                    {prompt}
-                    {command}                       
-                </span>
+            <span className='terminal-input'>   
+                <span className='prompt'>{prompt}</span>  
+                {command}                       
             </span>
             <br/>
-            <span>
-                {output}
-            </span>
+            {output}
+
         </div>
     )
 }
