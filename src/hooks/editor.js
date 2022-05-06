@@ -26,6 +26,7 @@ export const useAutoType = (speed=50, startDelay=0, endDelay=0) => {
                 }
             }, endDelay);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [auto])
 
     return [

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useTerminalControl, useAutoType } from './hooks/editor';
+import { useTerminalControl } from './hooks/editor';
 import Terminal from './components/Terminal';
 
 const App = () => {	
@@ -20,12 +20,14 @@ const App = () => {
 		if (!terminal.loading && terminal.history.length === 0){
 			submit('cd portfolio', 2000);
 		}	
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [terminal.loading]);
+
 	useEffect(() => {		
 		if (!terminal.sending && readyProgress > 0) {
 			setReadyProgress(prev => prev - 1);
 		}
-	}, [terminal.sending]);
+	}, [terminal.sending, readyProgress]);
 
 	useEffect(() => {
 		terminal.setCommands({
@@ -148,6 +150,7 @@ const App = () => {
 				)
 			}
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	
 	return (	
