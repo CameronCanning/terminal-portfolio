@@ -50,13 +50,13 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
     const [history, setHistory] = useState([]);
     const [user, setUser] = useState(_user);
     const [dir, setDir] = useState(_dir);
-    
+
+    const [commands, setCommands] = useState({});
     const [[command, setCommand], typeCommand, typing] = useAutoType(50, 0, 1100);
 
     //load effect then call initial command
     useEffect(() => {
         if (loading) {
-            console.log('loading...')
             setTimeout(() => {
                 setLoadTime(0);
                 setSending(false);
@@ -64,26 +64,16 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
         }
         //prevents running on dev hotreload
         else if (history.length === 0) {
-			console.log('loaded');
-			submitCommand('cd portfolio', 2000);
+			submit('cd portfolio', 2000);
         }
     }, [loading]);	
 
     const run = (cmd) => {
-        const commands = {
-            'cd portfolio': () => {
-                setDir('/portfolio');
-                //return null;
-            },
-            'ls': () => {
-                return <p>list</p>;
-            }
-        }
         if (cmd in commands) {
             return commands[cmd]();
         } 
         else {
-            return 'Command does not exist'
+            return 'command not found';
         }
     }
 
@@ -102,7 +92,7 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
         setSending(false);
     }
 
-    const submitCommand = (cmd, delay) => {
+    const submit = (cmd, delay) => {
         if (sending) {
             return null;
         }
@@ -121,9 +111,12 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
             history,
             typing,
             loading,
-            sending
+            sending,
+            setUser,
+            setDir,
+            setCommands 
         }
         ,
-        submitCommand   
+        submit                         
     ]
 }
