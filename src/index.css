@@ -48,11 +48,11 @@ body, html, #root {
   margin-right: 10px;
   width: 900px;
 }
-
 .terminal {
   background-color: var(--terminal-bg-color);
   border-radius: 5px;
   font-size: var(--t-font-size-lg);
+  word-break: break-all;
 }
 .terminal-body {
   border-radius: 5px;
@@ -62,18 +62,19 @@ body, html, #root {
   overflow-y: auto;
   height: 450px;
 }
-.cursor {
-  display: inline-block;
+.cursor-wrapper {
+  display: inline-table;
+  vertical-align: middle;
   margin-left: 1px;
-  height: 1rem;
+}
+
+.cursor {
+  display: table-cell;
+  background-color: var(--main-text-color);
+  height: .9rem;
   width: .5rem;
-  background-color: white;
-  
 }
-.terminal-input {
-  display: inline-flex;
-  align-items: center;
-}
+
 @media (max-width: 900px){
   .command-container {
     font-size: var(--c-font-size-md);
@@ -92,6 +93,10 @@ body, html, #root {
   }
   .terminal {
     font-size: var(--t-font-size-sm);
+  }
+  .cursor {
+    height: .75rem;
+    width: .38rem;
   }
 }
 @media (max-width: 567px){
@@ -133,13 +138,16 @@ body, html, #root {
     padding-top: 10px;
     padding-bottom: 10px;
   }
+
 }
 @media (max-width: 392px) {
   .terminal {
-    font-size: .65rem;
+    font-size: var(--t-font-size-xs);
   }
-  
-  
+  .cursor {
+    height: .65rem;
+    width: .32rem;
+  }
 } 
 .fade-in {
 	opacity: 1;
