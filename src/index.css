@@ -1,26 +1,76 @@
-body {
-  background-color: #CFAFAF;
-  color: #fff;
+:root {
+  --bg-color: rgb(45, 85, 57);
+}
+body, html, #root {
+  background-color: var(--bg-color);
+  color: rgb(255, 255, 255);
   margin: 0;
   height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: calc(10px + 2vmin);
-  font-size: 1.6rem;
-}
-
-
-.terminal {
-  background-color: #373737;
-  margin: auto;
-  margin-top: 50px; 
-  width: 900px;
-  border-radius: 5px;
+  width: 100%;
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;  
+}
+.command-btn {
+  cursor: pointer;
+
+}
+.command-container {
+  color:#fff;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  opacity: 0;
+}
+.fade-in {
+	opacity: 1;
+	animation-name: fadein;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in;
+	animation-duration: 1s;
+}
+@keyframes fadein {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.terminal {
+  width: 900px;  
+  background-color: #373737;
+  border-radius: 5px;
+  margin:auto;
+}
+
+.main-content {
+  margin:auto;
+  width: 900px;
+  font-size: 1rem;
+}
+@media (max-width: 900px){
+  .main-content{
+    width: 96vw;
+    font-size: .8rem;
+  }
+}
+@media (max-width: 576px){
+  .main-content{
+    width: 96vw;
+    font-size: .7rem;
+  }
+    
+}
+.test {
+  background-color: #373737;
+  border-radius: 5px;
 }
 .terminal-content-wrapper {  
   background-color: #373737;
@@ -33,8 +83,8 @@ body {
 .cursor {
   display:inline-block;
   margin: 0 0 -4px 4px;
-  height: 25px;
-  width: 13px;
+  height: 1.2rem;
+  width: .6rem;
   background-color: white;
   
 }
@@ -49,7 +99,7 @@ body {
 .terminal-header {
   padding: 0;
   margin: 0;
-  height: 37px;
+  height: 2rem;
   border-radius: 5px 5px 0 0;
   background-color: #555;
 }
@@ -78,9 +128,22 @@ span.dir-color{
 
 }
 body::-webkit-scrollbar-thumb {
-  border: 7px #CFAFAF solid;
+  border: 7px var(--bg-color) solid;
   background-clip: padding-box;
   background: #555;
   border-radius: 10px;
 
+}
+
+.terminal-link {
+  color: lightblue
+}
+
+.json-key {
+  color: cornflowerblue;
+}
+
+span, a, p {
+  margin:0;
+  padding:0;
 }

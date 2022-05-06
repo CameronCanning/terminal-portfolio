@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 
 const Terminal = ({loading, history, user, dir, command, typing, noHeader=false}) => {
     return (
-        <div className='terminal'>
+        <div className='terminal main-content'>
             {!noHeader && <Header/>}
-            <div className='bottom-scroll'>
+            <div className='test'>
                 <div className='terminal-content-wrapper'>
                     {
                         loading
@@ -58,6 +58,7 @@ const Content = ({user, host, dir, command, output}) => {
                     {command}                       
                 </span>
             </span>
+            <br/>
             <span>
                 {output}
             </span>

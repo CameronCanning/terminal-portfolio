@@ -62,10 +62,6 @@ export const useTerminalControl = (_user='user', _dir='', load= 0) => {
                 setSending(false);
             }, loading);    
         }
-        //prevents running on dev hotreload
-        else if (history.length === 0) {
-			submit('cd portfolio', 2000);
-        }
     }, [loading]);	
 
     const run = (cmd) => {
