@@ -1,15 +1,4 @@
 import { useEffect, useRef } from 'react';
-
-const Welcome = <span>
-        <span>{' __          __  _                            _                                               _     _ '}</span>
-        <span>{' \ \        / / | |                          | |                                             | |   | |'}</span>
-        <span>{'  \ \  /\  / /__| | ___ ___  _ __ ___   ___  | |_ ___    _ __ ___  _   _  __      _____  _ __| | __| |'}</span>
-        <span>{"   \ \/  \/ / _ \ |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | '_ ` _ \| | | | \ \ /\ / / _ \| '__| |/ _` |"}</span>
-        <span>{'    \  /\  /  __/ | (_| (_) | | | | | |  __/ | || (_) | | | | | | | |_| |  \ V  V / (_) | |  | | (_| |'}</span>
-        <span>{'     \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  |_| |_| |_|\__, |   \_/\_/ \___/|_|  |_|\__,_|'}</span>
-        <span>{'                                                                    __/ |                             '}</span>
-        <span>{'                                                                  |___/                               '}</span>
-    </span>
     
 const Terminal = ({loading, history, user, dir, command, typing, noHeader=false}) => {
     return (
