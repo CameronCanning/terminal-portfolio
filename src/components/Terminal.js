@@ -12,7 +12,6 @@ const Terminal = ({loading, history, user, dir, command, typing, noHeader=false}
                         <span className={'cursor blink'}/>
                         :
                         <>
-                        <Welcome/>
                         {history.map((e, i) => {
                             return <Content key={i} {...e}/>
                         })}
